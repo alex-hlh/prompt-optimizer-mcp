@@ -1,5 +1,7 @@
 # Prompt Optimizer
 
+> English | [中文](README.md)
+
 A prompt optimization toolkit based on [prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) templates, offering both an **MCP server** and a **zero-config Inline Skill**.
 
 📦 npm: `npx prompt-optimizer-mcp`

@@ -1,5 +1,7 @@
 # Prompt Optimizer
 
+> [English](README.en.md) | 中文
+
 基于 [prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) 核心模板思路的提示词优化工具集，提供 **MCP 服务** 和 **零配置 Inline Skill** 两种使用方式。
 
 📦 npm：`npx prompt-optimizer-mcp`
