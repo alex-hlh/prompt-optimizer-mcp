@@ -2,6 +2,8 @@
 
 基于 [prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) 核心模板思路的极简 MCP 服务。通过独立的 LLM（如本地 Ollama 或低成本 API）为 AI Agent 提供提示词优化能力，让主模型专注于高价值任务。
 
+📦 已发布到 npm：`npx prompt-optimizer-mcp`
+
 ---
 
 ## 功能
@@ -21,8 +23,16 @@
 
 ### 安装
 
+方式一：npm 全局安装（推荐）
+
 ```bash
-pip install mcp openai
+npm install -g prompt-optimizer-mcp
+```
+
+方式二：直接 npx 运行（无需安装）
+
+```bash
+npx prompt-optimizer-mcp
 ```
 
 ### 配置
@@ -49,133 +59,25 @@ OPTIMIZER_MODEL=deepseek-chat
 ### 运行
 
 ```bash
-python mcp_server.py
+npx prompt-optimizer-mcp
 ```
 
 ---
 
 ## 集成指南
 
-### Claude Desktop
-
-编辑 `claude_desktop_config.json`：
+所有 MCP 客户端配置模式一致，只需替换 `command` 和 `args`：
 
 ```json
 {
   "mcpServers": {
     "prompt-optimizer": {
-      "command": "python",
-      "args": ["E:/obsidian知识库/04_Projects/prompt-optimizer-mcp/mcp_server.py"],
+      "command": "npx",
+      "args": ["prompt-optimizer-mcp"],
       "env": {
         "OPTIMIZER_API_BASE": "https://api.deepseek.com/v1",
         "OPTIMIZER_API_KEY": "sk-your-key",
         "OPTIMIZER_MODEL": "deepseek-chat"
-      }
-    }
-  }
-}
-```
-
-配置后在对话中对 Claude 说 **"优化这个 prompt"** 即可自动触发。
-
-### Cursor
-
-在 Cursor 的 MCP 配置中添加：
-
-```json
-{
-  "mcpServers": {
-    "prompt-optimizer": {
-      "command": "python",
-      "args": ["E:/obsidian知识库/04_Projects/prompt-optimizer-mcp/mcp_server.py"],
-      "env": {
-        "OPTIMIZER_API_BASE": "https://api.deepseek.com/v1",
-        "OPTIMIZER_API_KEY": "sk-your-key",
-        "OPTIMIZER_MODEL": "deepseek-chat"
-      }
-    }
-  }
-}
-```
-
-在 Cursor 的 Composer 或 Chat 中，@ 并选择 prompt-optimizer 工具即可调用。
-
-### Windsurf / Codeium
-
-编辑 MCP 配置文件：
-
-```json
-{
-  "mcpServers": {
-    "prompt-optimizer": {
-      "command": "python",
-      "args": ["E:/obsidian知识库/04_Projects/prompt-optimizer-mcp/mcp_server.py"],
-      "env": {
-        "OPTIMIZER_API_BASE": "https://api.deepseek.com/v1",
-        "OPTIMIZER_API_KEY": "sk-your-key",
-        "OPTIMIZER_MODEL": "deepseek-chat"
-      }
-    }
-  }
-}
-```
-
-### Opencode
-
-在 `opencode.json` 或项目配置中添加 MCP 服务：
-
-```json
-{
-  "mcpServers": {
-    "prompt-optimizer": {
-      "command": "python",
-      "args": ["E:/obsidian知识库/04_Projects/prompt-optimizer-mcp/mcp_server.py"],
-      "env": {
-        "OPTIMIZER_API_BASE": "https://api.deepseek.com/v1",
-        "OPTIMIZER_API_KEY": "sk-your-key",
-        "OPTIMIZER_MODEL": "deepseek-chat"
-      }
-    }
-  }
-}
-```
-
-### Claude Code (CLI)
-
-编辑 `~/.claude/settings.json`：
-
-```json
-{
-  "mcpServers": {
-    "prompt-optimizer": {
-      "command": "python",
-      "args": ["E:/obsidian知识库/04_Projects/prompt-optimizer-mcp/mcp_server.py"],
-      "env": {
-        "OPTIMIZER_API_BASE": "https://api.deepseek.com/v1",
-        "OPTIMIZER_API_KEY": "sk-your-key",
-        "OPTIMIZER_MODEL": "deepseek-chat"
-      }
-    }
-  }
-}
-```
-
-也可配置到项目级 `./claude.json` 中，只对当前项目生效。
-
-### 通用：任何 MCP 客户端
-
-所有 MCP 客户端的配置模式一致：
-
-```json
-{
-  "mcpServers": {
-    "prompt-optimizer": {
-      "command": "python",
-      "args": ["<绝对路径>/mcp_server.py"],
-      "env": {
-        "OPTIMIZER_API_BASE": "<API接口地址>",
-        "OPTIMIZER_API_KEY": "<API密钥>",
-        "OPTIMIZER_MODEL": "<模型名称>"
       }
     }
   }
@@ -296,6 +198,9 @@ def optimize_translation_prompt(prompt: str) -> str:
 
 ```
 prompt-optimizer-mcp/
+├── package.json           # npm 包元信息
+├── index.js               # Node.js 包装器 → spawn python
+├── install.js             # postinstall: 自动 pip install
 ├── mcp_server.py          # MCP 服务入口 (73行)
 ├── templates/             # 提示词优化模板
 │   ├── user_optimize_basic.txt        # 基础优化
@@ -304,7 +209,7 @@ prompt-optimizer-mcp/
 │   ├── iterate_prompt.txt             # 迭代优化
 │   ├── evaluate_prompt.txt            # 质量评估
 │   └── image_optimize.txt             # 文生图优化
-├── .env                   # 模型配置（不提交）
+├── .gitignore
 ├── .env.example           # 配置示例
 ├── test.py                # 测试脚本
 ├── requirements.txt       # 依赖
