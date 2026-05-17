@@ -1,8 +1,8 @@
-# Prompt Optimizer MCP Server
+# Prompt Optimizer
 
-基于 [prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) 核心模板思路的极简 MCP 服务。通过独立的 LLM（如本地 Ollama 或低成本 API）为 AI Agent 提供提示词优化能力，让主模型专注于高价值任务。
+基于 [prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) 核心模板思路的提示词优化工具集，提供 **MCP 服务** 和 **零配置 Inline Skill** 两种使用方式。
 
-📦 已发布到 npm：`npx prompt-optimizer-mcp`
+📦 npm：`npx prompt-optimizer-mcp`
 
 ---
 
@@ -77,15 +77,48 @@ npx prompt-optimizer-mcp
 
 ---
 
+## Inline Skill（零配置）
+
+无需配置任何外部模型，由当前对话 AI 直接执行 prompt 优化。适用场景：不想配 API Key 时快速使用。
+
+```
+prompt-optimizer-mcp/
+└── skill/
+    ├── SKILL.md               # 零配置 skill 指令
+    └── templates/             # 优化策略模板（同 MCP 版复用一套策略）
+```
+
+配置方式：在 agent 中加载 `skill/SKILL.md` 即可，触发后 AI 读取 `skill/templates/` 中的策略自行优化。
+
+**与 MCP 版对比：**
+
+| | MCP 版 | Inline Skill |
+|---|---|---|
+| 调用方式 | 外部 LLM (DeepSeek/Ollama) | 当前对话 AI 直接执行 |
+| 配置 | 需要 API_KEY + MODEL | **零配置** |
+| 依赖 | mcp + openai Python 包 | 无 |
+| 集成对象 | MCP 客户端 | 支持 skill 加载的 agent |
+
+---
+
 ## 架构设计
 
 ```
 用户原始 prompt
     ↓
-mcp_server.py (调度层, 73行)
-    ├── 选择模板 (templates/*.txt)
-    ├── 替换占位符 {user_prompt}
-    └── 发送到 LLM (通过 OpenAI 兼容接口)
+┌─ 两种执行路径 ─────────────────┐
+│                                │
+├─ MCP 版 ───────────────────────┤
+│ mcp_server.py (调度层)         │
+│   ├── 选择模板 (templates/)    │
+│   ├── 替换占位符 {user_prompt} │
+│   └── 调用外部 LLM 优化        │
+│                                │
+├─ Inline Skill ─────────────────┤
+│ skill/SKILL.md (指令层)        │
+│   ├── 读取 skill/templates/    │
+│   └── 当前 AI 直接优化         │
+└────────────────────────────────┘
     ↓
 优化后的 prompt
 ```
@@ -181,17 +214,20 @@ prompt-optimizer-mcp/
 ├── index.js               # Node.js 包装器 → spawn python
 ├── install.js             # postinstall: 自动 pip install
 ├── mcp_server.py          # MCP 服务入口 (73行)
-├── templates/             # 提示词优化模板
-│   ├── user_optimize_basic.txt        # 基础优化
-│   ├── user_optimize_professional.txt # 深度优化
-│   ├── user_optimize_planning.txt     # 规划式优化
-│   ├── iterate_prompt.txt             # 迭代优化
-│   ├── evaluate_prompt.txt            # 质量评估
-│   └── image_optimize.txt             # 文生图优化
+├── templates/             # 提示词优化模板（MCP 版用）
+│   ├── user_optimize_basic.txt
+│   ├── user_optimize_professional.txt
+│   ├── user_optimize_planning.txt
+│   ├── iterate_prompt.txt
+│   ├── evaluate_prompt.txt
+│   └── image_optimize.txt
+├── skill/                 # 零配置 Inline Skill
+│   ├── SKILL.md
+│   └── templates/         # 优化策略模板（与 MCP 版复用）
 ├── .gitignore
-├── .env.example           # 配置示例
-├── test.py                # 测试脚本
-├── requirements.txt       # 依赖
+├── .env.example
+├── test.py
+├── requirements.txt
 └── README.md
 ```
 
