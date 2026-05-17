@@ -35,27 +35,6 @@ npm install -g prompt-optimizer-mcp
 npx prompt-optimizer-mcp
 ```
 
-### 配置
-
-创建 `.env` 文件，选择任意 OpenAI 兼容接口：
-
-```bash
-# DeepSeek（推荐，性价比高）
-OPTIMIZER_API_BASE=https://api.deepseek.com/v1
-OPTIMIZER_API_KEY=sk-your-key
-OPTIMIZER_MODEL=deepseek-chat
-
-# 或 Ollama 本地（免费）
-# OPTIMIZER_API_BASE=http://localhost:11434/v1
-# OPTIMIZER_API_KEY=ollama
-# OPTIMIZER_MODEL=qwen2.5:7b
-
-# 或 OpenAI
-# OPTIMIZER_API_BASE=https://api.openai.com/v1
-# OPTIMIZER_API_KEY=sk-your-key
-# OPTIMIZER_MODEL=gpt-4o-mini
-```
-
 ### 运行
 
 ```bash
