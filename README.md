@@ -83,12 +83,22 @@ npx prompt-optimizer-mcp
 
 ```
 prompt-optimizer-mcp/
-└── skill/
+└── prompt-optimizer-skill/
     ├── SKILL.md               # 零配置 skill 指令
     └── templates/             # 优化策略模板（同 MCP 版复用一套策略）
 ```
 
-配置方式：在 agent 中加载 `skill/SKILL.md` 即可，触发后 AI 读取 `skill/templates/` 中的策略自行优化。
+### 安装方式
+
+```bash
+# 方式一：复制到全局 skills 目录（推荐）
+cp -r prompt-optimizer-skill ~/.agents/skills/prompt-optimizer-1.0.0
+
+# 方式二：复制到 Claude Code skills 目录
+cp -r prompt-optimizer-skill ~/.claude/skills/prompt-optimizer
+```
+
+安装后，AI 会在用户提到"优化 prompt"时自动读取模板文件执行优化。无需任何 API Key 或模型配置。
 
 **与 MCP 版对比：**
 
@@ -114,9 +124,9 @@ prompt-optimizer-mcp/
 │   ├── 替换占位符 {user_prompt} │
 │   └── 调用外部 LLM 优化        │
 │                                │
-├─ Inline Skill ─────────────────┤
-│ skill/SKILL.md (指令层)        │
-│   ├── 读取 skill/templates/    │
+├─ Inline Skill ───────────────────────┤
+│ prompt-optimizer-skill/SKILL.md      │
+│   ├── 读取 prompt-optimizer-skill/templates/  │
 │   └── 当前 AI 直接优化         │
 └────────────────────────────────┘
     ↓
@@ -221,9 +231,9 @@ prompt-optimizer-mcp/
 │   ├── iterate_prompt.txt
 │   ├── evaluate_prompt.txt
 │   └── image_optimize.txt
-├── skill/                 # 零配置 Inline Skill
+├── prompt-optimizer-skill/  # 零配置 Inline Skill
 │   ├── SKILL.md
-│   └── templates/         # 优化策略模板（与 MCP 版复用）
+│   └── templates/          # 优化策略模板（与 MCP 版复用）
 ├── .gitignore
 ├── .env.example
 ├── test.py

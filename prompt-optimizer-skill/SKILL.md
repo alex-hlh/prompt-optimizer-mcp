@@ -1,5 +1,5 @@
 ---
-name: prompt-optimizer-inline
+name: prompt-optimizer
 description: "AI提示词优化 — 使用当前对话模型对用户提示词进行优化/迭代/评估/文生图优化。触发词：优化prompt、优化提示词、改进提示词、评估prompt、文生图提示词。不需要任何外部模型配置。"
 ---
 
