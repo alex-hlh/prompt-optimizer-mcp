@@ -1,0 +1,28 @@
+{
+  "name": "prompt-optimizer-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for AI prompt optimization via small/cheap LLMs",
+  "type": "commonjs",
+  "main": "index.js",
+  "bin": {
+    "prompt-optimizer-mcp": "index.js"
+  },
+  "files": [
+    "index.js",
+    "install.js",
+    "mcp_server.py",
+    "templates/",
+    "requirements.txt",
+    "README.md"
+  ],
+  "scripts": {
+    "postinstall": "node install.js",
+    "start": "node index.js"
+  },
+  "keywords": ["mcp", "prompt-optimizer", "prompt-engineering", "claude", "cursor"],
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linshenkx/prompt-optimizer-mcp.git"
+  }
+}
